@@ -7,8 +7,8 @@ DI(Dependency Injection)는 IoC의 한 형태로, `객체가 자신의 의존성
 이는 Bean이 자신의 의존성을 직접 생성하거나 위치를 제어하는 방식(Service Locator 패턴 등)과 반대로 작동하기 때문에 "제어의 역전(Inversion of Control)"이라는 이름이 붙었습니다.
 
 
-### DI?
-DI란 스프링의 핵심인 기능이다. 과거 EJB로 인해 객체지향을 잃은 자바는 POJO라는 용어가 등장할 정도로 다시 객체 지향으로 돌아 갈려 했다. 그리고 그런 문제들을 보완하기 위해 spring이 등장했다. 
+### DI(DependecyInjection)
+DI는 스프링의 핵심인 기능이다. 과거 EJB로 인해 객체지향을 잃은 자바는 POJO라는 용어가 등장할 정도로 다시 객체 지향으로 돌아 갈려 했다. 그리고 그런 문제들을 보완하기 위해 spring이 등장했다. 
 spring이 추구하는 가치에는 객체지향이 존재한다. 그리고 객체지향을 위해서는 DI가 필요하다. DI의 이름은 Dependency Injection으로 한국어로 의존관계 주입이라불린다.
 의존관계 주입이란, 생성하는 클래스와 사용하는 클래스를 분리하고 사용하는 클래스에서 매개변수로 받은 클래스가 어떤 구현 클래스인지 몰라야 한다. 
 
@@ -55,11 +55,11 @@ public void client() throws Exception {
 }
 ```
 
-+ 코드 설명
-> java 코드만을 사용해서 작성했다. DIFactory가 Ioc 기능을 설명하는 Class입니다.
+### 코드 설명
+ + java 코드만을 사용해서 작성했다. DIFactory가 Ioc 기능을 설명하는 Class입니다.
 
 
-## 유명한 주입 방법
+## 주입 방법
 ### 생성자 주입
 + 설명 Bean을 생성자를 통해서 주입한다. spring-team에서는 생성자 주입을 추천한다.
 ```java
@@ -71,11 +71,11 @@ public ConstructInject(MemberService memberService){
     this.memberService = memberService;
 }
 ```
-장점
+#### 장점
 + 불변의 객체를 보장한다. 
 + not null을 보장한다.
 
-주의 사항
+#### 주의 사항
 + 생성자 인수가 너무 많으면 이 클래스는 책임이 많을 수 있으므로 리팩토링이 필요함을 의미한다.
 
 ### Setter 주입
@@ -90,21 +90,22 @@ public void setMemberService(MemberService memberService){
 }
 ```
 
-+ 장점
-> setter 메소드가 해당 클래스의 객체를 나중에 재구성하거나 다시 주입할 수 있습니다.
-+ 단점
-> null 검사를 무조건 해야한다.
+#### 장점
++  setter 메소드가 해당 클래스의 객체를 나중에 재구성하거나 다시 주입할 수 있습니다.
+#### 단점
++ null 검사를 무조건 해야한다.
 
 
 
 ### 필드 주입
+
 
 ```java
 @Autowired
 private MemberService memberService;
 ```
 
-+ 자주 사용하지 않는 이유
+#### 자주 사용하지 않는 이유
 1. 리플렉션을 통한 주입 방식
    필드 주입은 리플렉션을 사용하여 비공개 필드에 접근해 의존성을 주입합니다. Java에서는 일반적으로 클래스 외부에서 비공개 필드를 직접 수정할 수 없지만, Spring은 리플렉션을 통해 필드에 접근하여 값을 주입합니다.
    리플렉션을 통한 필드 주입은 Spring의 DI 컨테이너가 직접 관리하기 때문에 Spring이 아닌 다른 프레임워크나 환경에서는 동작하지 않습니다.
@@ -170,3 +171,7 @@ public class SingletonService {
     }
 }
 ```
+
+
+### 참고 사이트
+[스프링 공식문서](https://docs.spring.io/spring-framework/reference/core/beans/dependencies.html)
