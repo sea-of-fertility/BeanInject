@@ -1,7 +1,7 @@
 # Bean Injection
 1. [IoC - Inversion of Control](#ioc---inversion-of-control)
 1. [DI - DependecyInjection](#DI---DependecyInjection)
-   - [팩토리 패턴을 이용해서 만든 DI 이해 코드](#팩토리-패턴을-이용해서-만든-DI-이해-코드)
+   - [팩토리 패턴을 이용해서 만든 유사 spring container](#팩토리-패턴을-이용해서-만든-유사-spring-container)
 2. [BBean 주입 방법](#Bean-주입-방법)
    - [생성자 주입](#생성자-주입)
    - [Setter 주입](#Setter-주입)
@@ -23,8 +23,8 @@ DI는 스프링의 핵심인 기능이다. 과거 EJB로 인해 객체지향을 
 spring이 추구하는 가치에는 객체지향이 존재한다. 그리고 객체지향을 위해서는 DI가 필요하다. DI의 이름은 Dependency Injection으로 한국어로 의존관계 주입이라불린다.
 의존관계 주입이란, 생성하는 클래스와 사용하는 클래스를 분리하고 사용하는 클래스에서 매개변수로 받은 클래스가 어떤 구현 클래스인지 몰라야 한다. 
 
-### 팩토리 패턴을 이용해서 만든 DI 이해 코드
-+ java 코드만을 사용해서 작성했다. DIFactory가 Ioc 기능을 설명하는 Class입니다.
+### 팩토리 패턴을 이용해서 만든 유사 spring container
++ java 코드만을 사용해서 작성했다. DI와 Ioc 기능을 설명하는 Class입니다.
 ```java
 public interface HelloInterface {
    void hello();
