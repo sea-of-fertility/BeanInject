@@ -1,65 +1,87 @@
-# 학습
+# Bean Injection
+1. [IoC - Inversion of Control](#ioc---inversion-of-control)
+1. [DI - DependecyInjection](#DI---DependecyInjection)
+   - [팩토리 패턴을 이용해서 만든 DI 이해 코드](#팩토리-패턴을-이용해서-만든-DI-이해-코드)
+2. [BBean 주입 방법](#Bean-주입-방법)
+   - [생성자 주입](#생성자-주입)
+   - [Setter 주입](#Setter-주입)
+   - [필드 주입](#필드-주입)
+   - [메소드 주입](#메소드-주입)
+3. [학습 출처](#학습-출처)
 
 
-### IoC(Inversion of Control)
+
+
+## IoC - Inversion of Control
 DI(Dependency Injection)는 IoC의 한 형태로, `객체가 자신의 의존성을 직접 생성하지 않고` 생성자 인자, 팩토리 메서드의 인자 또는 생성된 후 설정된 속성을 통해서만 정의하는 방식을 말합니다.
 이러한 의존성은 IoC 컨테이너가 Bean을 생성할 때 주입됩니다. 
 이는 Bean이 자신의 의존성을 직접 생성하거나 위치를 제어하는 방식(Service Locator 패턴 등)과 반대로 작동하기 때문에 "제어의 역전(Inversion of Control)"이라는 이름이 붙었습니다.
 
 
-### DI(DependecyInjection)
+## DI - DependecyInjection
 DI는 스프링의 핵심인 기능이다. 과거 EJB로 인해 객체지향을 잃은 자바는 POJO라는 용어가 등장할 정도로 다시 객체 지향으로 돌아 갈려 했다. 그리고 그런 문제들을 보완하기 위해 spring이 등장했다. 
 spring이 추구하는 가치에는 객체지향이 존재한다. 그리고 객체지향을 위해서는 DI가 필요하다. DI의 이름은 Dependency Injection으로 한국어로 의존관계 주입이라불린다.
 의존관계 주입이란, 생성하는 클래스와 사용하는 클래스를 분리하고 사용하는 클래스에서 매개변수로 받은 클래스가 어떤 구현 클래스인지 몰라야 한다. 
 
-
+### 팩토리 패턴을 이용해서 만든 DI 이해 코드
++ java 코드만을 사용해서 작성했다. DIFactory가 Ioc 기능을 설명하는 Class입니다.
 ```java
 public interface HelloInterface {
-    void hello();
+   void hello();
 }
 
 public class Hello1 implements HelloInterface {
-    @Override
-    public void hello() {
-        System.out.println("hello");
-    }
+   @Override
+   public void hello() {
+      System.out.println("hello from Hello1");
+   }
 }
 
 public class Hello2 implements HelloInterface {
-    @Override
-    public void hello() {
-        System.out.println("hello");
-    }
+   @Override
+   public void hello() {
+      System.out.println("hello from Hello2");
+   }
 }
 
 /**
- * 의존 관계를 주입해주는 클래스이다. 어떤 구현 클래스를 주입할지 여기서 결정한다. 
+ * 의존 관계를 주입해주는 클래스이다. 어떤 구현 클래스를 주입할지 여기서 결정한다.
  */
 public class DIFactory {
-    public HelloInterface helloInterface() {
-        //원하는 구체클래스를 생성하고 return한다. 
-        HelloInterface helloInterface = new Hello1();
-        return helloInterface;
-    }
+   private final HelloInterface helloInterface;
+
+   public DIFactory(HelloInterface helloInterface) {
+      this.helloInterface = helloInterface;
+   }
+
+   public HelloInterface getHelloInterface() {
+      return helloInterface;
+   }
 }
 
 /**
- * 주입받은 클래스를 사용하는 곳이다. 
+ * 주입받은 클래스를 사용하는 곳이다.
  * @throws Exception
  */
 @Test
 public void client() throws Exception {
-    //인터페이스로 받기 때문에 어떤 구현 클래스인지 알 수 없다. 
-    HelloInterface helloInterface = new DIFactory().helloInterface();
-    helloInterface.hello();
+   // 어떤 구현 클래스를 사용할지 결정 (외부에서 주입)
+   DIFactory factory = new DIFactory(new Hello1());
+   HelloInterface helloInterface = factory.getHelloInterface();
+
+   // Hello1의 구현이 호출됨
+   helloInterface.hello();
+
+   // 다른 구현 클래스를 사용할 수도 있음
+   DIFactory factory2 = new DIFactory(new Hello2());
+   HelloInterface helloInterface2 = factory2.getHelloInterface();
+   helloInterface2.hello();
 }
+
 ```
 
-### 코드 설명
- + java 코드만을 사용해서 작성했다. DIFactory가 Ioc 기능을 설명하는 Class입니다.
 
-
-## 주입 방법
+## Bean 주입 방법
 ### 생성자 주입
 + 설명 Bean을 생성자를 통해서 주입한다. spring-team에서는 생성자 주입을 추천한다.
 ```java
@@ -96,10 +118,7 @@ public void setMemberService(MemberService memberService){
 + null 검사를 무조건 해야한다.
 
 
-
 ### 필드 주입
-
-
 ```java
 @Autowired
 private MemberService memberService;
@@ -173,5 +192,5 @@ public class SingletonService {
 ```
 
 
-### 참고 사이트
+### 학습 출처
 [스프링 공식문서](https://docs.spring.io/spring-framework/reference/core/beans/dependencies.html)
